@@ -1,0 +1,65 @@
+function main(){
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet Info");
+  var data = sheet.getDataRange().getValues();
+
+  for(var i = 1; i < data.length; i++){
+    if(data[i][0] == "")
+      break;
+
+    var id = data[i][0];
+    var tabName = data[i][1]; 
+    var rowGap = addRows(id, tabName);
+    sheet.getRange(i+1, 3).setValue(rowGap);
+
+  }
+
+}
+
+
+function addRows(id, tabName) {
+
+var ss = SpreadsheetApp.openById(id);  //get the spreadsheet
+var ws = ss.getSheetByName(tabName); //get the sheet (or "tab")
+var sheetName = ws.getSheetName();
+  var data = ws.getDataRange().getValues();
+  
+  for(var i = 0; i < data.length; i++)
+  {
+    if (data[i][0] == "")
+    break;
+  }
+  //var rows = i;
+
+ var url = ss.getUrl();
+
+ Logger.log(url);
+ Logger.log(sheetName);
+
+ var neededRows = 900; //set to the number want the email to trigger on
+ var rowGap = ws.getMaxRows() - ws.getLastRow(); //get the difference between total rows and the last data row
+ Logger.log(rowGap);
+ var insert = [rowGap];
+ ws.getRange(i+1, 1, 1, insert.length).setValues([insert]);
+
+ //if the gap is less than what is required, send the email
+  if (rowGap < neededRows) {
+
+    var email = "ayan@letsbonobo.com"; //set to correct address to receive email
+    var subj = "Sheet needs more rows added"; //set to the subject
+    var msg = `Hey! the spreadsheet needs more rows added!<br>
+                So please add them <a href="${url}">here</a><br>
+                Thanks!`; 
+              //message
+
+ //note: the email will be coming "from" whoever runs the script or sets up a trigger for the script to run
+    /*MailApp.sendEmail({  
+        to: email,
+        subject: subj,
+        htmlBody: msg
+
+         })
+   }*/
+  }   
+  return rowGap;
+}
