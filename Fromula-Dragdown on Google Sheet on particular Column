@@ -1,0 +1,14 @@
+function addFormulaRows(){
+var ROW_LIMIT = 500;
+var ROWS_OF_FORMULA = 1000;
+var DATA_ENTRY_COL = 2;
+
+var ss = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Formula Dragdown")
+
+var lastRow = ss.getDataRange().getLastRow();
+var lastColumn = ss.getDataRange().getLastColumn();
+var rowLength = ss.getRange(1,DATA_ENTRY_COL,1,1).getNextDataCell(SpreadsheetApp.Direction.DOWN).getRow();
+
+if (lastRow-rowLength < ROW_LIMIT)
+ss.getRange(lastRow,1,1,lastColumn).copyTo(ss.getRange(lastRow+1,1,ROWS_OF_FORMULA,lastColumn), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
+}
